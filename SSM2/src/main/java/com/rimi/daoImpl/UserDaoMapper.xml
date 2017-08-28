@@ -2,21 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
 
 <!-- 配置对应的接口 -->
+
 <mapper  namespace="com.rimi.dao.UserDao">
  	
  	<resultMap type="UserBean" id="rm">
- 		<id property="userId"   column="id" />
- 		<result property="userName" column="name"/>
- 		<result property="userPs"  column="ps"/>
+ 		<id property="userId"   column="user_id" />
+ 		<result property="userLoginName" column="user_loginname"/>
+ 		<result property="userName" column="user_name"/>
+ 		<result property="userPs" column="user_ps"/>
+ 		<result property="userSex" column="user_sex"/>
+ 		<result property="userAge" column="user_age"/>
+ 		<result property="userState" column="user_state"/>
+ 		<result property="userRole" column="user_role"/>
+ 		<result property="userJob" column="user_job"/>
+ 		<result property="userJobState" column="user_jobstate"/>
+ 		<result property="userEmail" column="user_email"/>
+ 		<result property="userTel" column="user_tel "/>
+ 		<result property="userPhone" column="user_phone"/>
+ 		<result property="userQq" column="user_qq"/>
  	</resultMap>
  
- 	<select id="getUserById"  parameterType="int" resultMap="rm">
-		select  *  from  userbean  where  id  =  #{userId}
+ 	<select id="login" parameterType="String" resultMap="rm" >
+		select  *  from  user_tb  where  user_loginname = #{arg0} 
  	</select>
- 	<select id="login"  resultMap="rm">
-		select  *  from  userbean  where  name = #{arg0} and ps = #{arg1}
- 	</select>
- 	<insert id="register" parameterType="UserBean">
- 		insert into userbean values(#{userId},#{userName},#{userPs})
- 	</insert>
 </mapper>
+

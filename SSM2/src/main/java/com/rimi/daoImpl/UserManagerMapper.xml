@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rimi.dao.UserManagerDao">
+
+	<!-- UserBean -->
+	<resultMap type="com.rimi.bean.UserBean" id="userRm">
+	    <id column="user_id" property="userId" jdbcType="INTEGER" />
+	    <result column="user_loginname" property="userLoginName" jdbcType="VARCHAR" />
+	    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	    <result column="user_ps" property="userPs" jdbcType="VARCHAR" />
+	    <result column="user_sex" property="userSex" jdbcType="INTEGER" />
+	    <result column="user_age" property="userAge" jdbcType="INTEGER" />
+	    <result column="user_state" property="userState" jdbcType="INTEGER" />
+	    <result column="user_role" property="userRole" jdbcType="INTEGER" />
+	    <result column="user_job" property="userJob" jdbcType="INTEGER" />
+	    <result column="user_jobstate" property="userJobState" jdbcType="INTEGER" />
+	    <result column="user_email" property="userEmail" jdbcType="VARCHAR" />
+	    <result column="user_tel" property="userTel" jdbcType="VARCHAR" />
+	    <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
+	    <result column="user_qq" property="userQq" jdbcType="VARCHAR" />
+     	<association property="uj" javaType="com.rimi.bean.UserJobBean" resultMap="jobRm"/>
+        <association property="js" javaType="com.rimi.bean.JobStateBean" resultMap="jobStateRm"/>
+        <association property="ur" javaType="com.rimi.bean.UserRoleBean" resultMap="roleRm"/>
+        <association property="us" javaType="com.rimi.bean.StateBean" resultMap="stateRm"/>
+        <association property="sex" javaType="com.rimi.bean.SexBean" resultMap="sexRm"/>
+ 	 </resultMap>
+ 	 
+ 	 <!-- SexBean -->
+ 	 <resultMap type="com.rimi.bean.SexBean" id="sexRm">
+ 	 	<id column="sex_id" property="sexId" jdbcType="INTEGER"/>
+        <result column="sex_name" property="sexName" jdbcType="VARCHAR"/>
+ 	 </resultMap>
+ 	 
+ 	 <!-- StateBean -->
+ 	 <resultMap type="com.rimi.bean.StateBean" id="stateRm">
+ 	 	 <id column="state_id" property="stateId" jdbcType="INTEGER"/>
+         <result column="state_name" property="stateName" jdbcType="VARCHAR"/>
+ 	 </resultMap>
+ 	 
+ 	 <!-- UserJobBean --> 	 
+ 	 <resultMap type="com.rimi.bean.UserJobBean" id="jobRm">
+ 	 	<id column="job_id" property="jobId" jdbcType="INTEGER"/>
+        <result column="job_name" property="jobName" jdbcType="VARCHAR"/>
+ 	 </resultMap>
+ 	 
+ 	 <!-- UserRoleBean -->
+ 	 <resultMap type="com.rimi.bean.UserRoleBean" id="roleRm">
+ 	 	 <id column="role_id" property="roleId" jdbcType="INTEGER"/>
+         <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+ 	 </resultMap>
+ 	 
+ 	 <!-- JobStateBean -->
+	 <resultMap type="com.rimi.bean.JobStateBean" id="jobStateRm">
+	  	 <id column="jobstate_id" property="jobstateId" jdbcType="INTEGER"/>
+         <result column="jobstate_name" property="jobstateName" jdbcType="VARCHAR"/>
+	 </resultMap>
+ 	 
+ 	 <!-- 查询最大Id -->
+ 	 <select id="maxId" resultType="java.lang.Integer">
+ 	 	select max(user_id) from user_tb
+ 	 </select>
+ 	 
+ 	 <!-- 验证用户登录名是否存在 -->
+ 	 <select id="checkLoginName" parameterType="java.lang.String" resultMap="userRm">
+ 	 	select * from user_tb where user_loginname = #{userLoginName}
+ 	 </select>
+ 	 
+ 	 <!-- 添加用户 -->
+ 	 <insert id="addUser" parameterType="com.rimi.bean.UserBean" >
+	    insert into user_tb (user_id, user_loginname, user_name, 
+	      user_ps, user_sex, user_age, 
+	      user_state, user_role, user_job, 
+	      user_jobstate, user_email, user_tel, 
+	      user_phone, user_qq)
+	    values (#{userId,jdbcType=INTEGER}, #{userLoginName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+	      #{userPs,jdbcType=VARCHAR}, #{userSex,jdbcType=INTEGER}, #{userAge,jdbcType=INTEGER}, 
+	      #{userState,jdbcType=INTEGER}, #{userRole,jdbcType=INTEGER}, #{userJob,jdbcType=INTEGER}, 
+	      #{userJobState,jdbcType=INTEGER}, #{userEmail,jdbcType=VARCHAR}, #{userTel,jdbcType=VARCHAR}, 
+	      #{userPhone,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR})
+	  </insert>
+	  
+	  <!-- 查询用户 -->
+	  <select id="queryUser" parameterType="java.util.Map" resultMap="userRm">
+ 		select * from user_tb u,user_job_tb uj,jobstate_tb js,user_role_tb ur,state_tb us,sex_tb sex
+ 		where u.user_job = uj.job_id 
+		and	  u.user_jobstate = js.jobstate_id
+		and   u.user_role = ur.role_id
+		and   u.user_state = us.state_id 
+		and   u.user_sex = sex.sex_id
+ 		<!-- <trim prefix="where" prefixOverrides="and">-->
+		 		<if test="userLoginName !=null ">
+		 			and u.user_loginname like #{userLoginName}
+		 		</if>
+		 		<if test="userRole != null and userRole > 0">
+		 			and u.user_role = #{userRole}
+		 		</if>
+		 		<if test="userState != null and userState > 0">
+		 			and u.user_state = #{userState}
+		 		</if>
+		 		<if test="userJob != null and userJob > 0">
+		 			and u.user_job = #{userJob}
+		 		</if>
+		 		<if test="userJobState != null and userJobState > 0">
+		 			and u.user_jobstate = #{userJobState}
+		 		</if>
+ 		<!-- </trim>-->
+ 		<if test="beginIndex != null and pageSize != null">
+ 			order by u.user_id ASC limit  #{beginIndex},#{pageSize} 
+ 		</if>
+ 	</select>
+ 
+ 	<!-- 通过Id查看用户详情 -->
+ 	<select id="getInfoById" parameterType="java.lang.Integer" resultMap="userRm">
+ 		select * from user_tb u,user_job_tb uj,jobstate_tb js,user_role_tb ur,state_tb us,sex_tb sex
+ 		where u.user_job = uj.job_id 
+		and	  u.user_jobstate = js.jobstate_id
+		and   u.user_role = ur.role_id
+		and   u.user_state = us.state_id 
+		and   u.user_sex = sex.sex_id
+		and   u.user_id = #{userId}
+ 	</select>
+ 	
+ 	<!-- 根据Id修改用户信息  -->
+ 	<update id="editUser" parameterType="com.rimi.bean.UserBean">
+	 	update user_tb
+	    set user_loginname = #{userLoginName,jdbcType=VARCHAR},
+	      user_name = #{userName,jdbcType=VARCHAR},
+	      user_ps = #{userPs,jdbcType=VARCHAR},
+	      user_sex = #{userSex,jdbcType=INTEGER},
+	      user_age = #{userAge,jdbcType=INTEGER},
+	      user_state = #{userState,jdbcType=INTEGER},
+	      user_role = #{userRole,jdbcType=INTEGER},
+	      user_job = #{userJob,jdbcType=INTEGER},
+	      user_jobstate = #{userJobState,jdbcType=INTEGER},
+	      user_email = #{userEmail,jdbcType=VARCHAR},
+	      user_tel = #{userTel,jdbcType=VARCHAR},
+	      user_phone = #{userPhone,jdbcType=VARCHAR},
+	      user_qq = #{userQq,jdbcType=VARCHAR}
+	    where user_id = #{userId,jdbcType=INTEGER}
+ 	</update>
+ 	
+ 	<!-- 根据Id删除用户-->
+ 	<delete id="delUserById" parameterType="java.lang.Integer" >
+ 		delete from user_tb where user_id = #{userId,jdbcType=INTEGER}
+ 	</delete>
+ 	
+ 	<!-- 批量删除用户 -->
+ 	<delete id="delAllUser" parameterType="java.util.Set">
+ 		delete from user_tb where user_id  in
+ 		<foreach collection="set" index="index" item="item" open="(" separator="," close=")">
+ 		   #{item}        
+ 		</foreach> 
+ 	</delete>
+ 	
+ 	<!-- 查询性别表  -->
+	<select id="selectSex" resultMap="sexRm">
+		select * from sex_tb
+	</select>
+	
+	<!-- 查询状态表 -->
+	<select id="selectState" resultMap="stateRm">
+		select * from state_tb
+	</select>
+	
+	<!-- 查询职业表 -->
+	<select id="selectJob" resultMap="jobRm">
+		select * from user_job_tb
+	</select>
+	
+	<!-- 查询角色表 -->
+	<select id="selectRole" resultMap="roleRm">
+		select * from user_role_tb
+	</select>
+	
+	<!-- 查询工作状态表 -->
+	<select id="selectJobState" resultMap="jobStateRm">
+		select * from jobstate_tb
+	</select>
+	
+	<!-- 修改个人资料 -->
+	<update id="updateUserById" parameterType="java.util.Map">
+		update user_tb
+		<set>
+			<if test="userName != null" >
+	       	 	user_name = #{userName,jdbcType=VARCHAR},
+	      	</if>	
+			<if test="userSex != null and userSex > 0" >
+	        	user_sex = #{userSex,jdbcType=INTEGER},
+	      	</if>
+	      	<if test="userAge != null and userAge >=0" >
+        		user_age = #{userAge,jdbcType=INTEGER},
+      		</if>
+      		<if test="userEmail != null" >
+        		user_email = #{userEmail,jdbcType=VARCHAR},
+      		</if>
+      		<if test="userTel != null" >
+        		user_tel = #{userTel,jdbcType=VARCHAR},
+	      	</if>
+	      	<if test="userPhone != null" >
+     		  	user_phone = #{userPhone,jdbcType=VARCHAR},
+	      	</if>
+	      	<if test="userQq != null" >
+	        	user_qq = #{userQq,jdbcType=VARCHAR},
+	      	</if>
+	    </set>
+	    where user_id = #{userId,jdbcType=INTEGER}
+	</update>
+	  
+	<!--修改密码  -->
+	<update id="editPassword" parameterType="java.util.Map">
+		update user_tb
+		<set>
+			<if test="userPs !=null">
+				user_ps=#{userPs,jdbcType=VARCHAR}
+			</if>
+		</set> 
+		where user_id =#{userId,jdbcType=INTEGER}
+	</update>
+	
+</mapper>

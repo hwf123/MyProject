@@ -14,6 +14,7 @@
 		<!--制定控制层的包  -->
 		<context:component-scan base-package="com.rimi.controller"></context:component-scan>
 		<!-- 开启注解编程 -->
+		
 		<mvc:annotation-driven></mvc:annotation-driven>
 		
 		<!-- 视图解析器 -->
@@ -22,54 +23,42 @@
 			<property name="suffix" value=".jsp"></property>
 		</bean>
 		
-		<!-- 加载数据源配置文件 -->
-		<context:property-placeholder location="classpath:jdbc.properties"/> 
-		
 		<!-- 数据源 链接数据库参数 -->
-		<!--  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-			<property name="driverClassName" value="${driver}"></property>
-			<property name="username" value="${username}"></property>
-			<property name="password"  value="${password}"></property>
-			<property name="url"  value="${url}"></property>
-		</bean>	-->	
-		
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 			<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
 			<property name="username" value="root"></property>
 			<property name="password"  value="123"></property>
-			<property name="url"  value="jdbc:mysql://localhost:3306/rimi"></property>
-		</bean>
+			<property name="url"  value="jdbc:mysql://localhost:3306/test"></property>
+		</bean>		
 
 		<!-- session工厂 -->
 		<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		    <!-- mybatis核心配置文件的路径 -->
-			<property name="typeAliasesPackage"  value="com.rimi.bean"></property>
-			<property name="mapperLocations" value="classpath:com/rimi/daoImpl/*.xml"></property>
-			<property name="dataSource" ref="dataSource"></property> 
+			<property name="configLocation" value="classpath:src/main/resources/mybatis-config.xml"></property>
+			<property name="dataSource" ref="dataSource"></property>
 		</bean>		
 		
-		<!-- Userdao -->
+		<!-- dao -->
 		<bean id="ud" class="org.mybatis.spring.mapper.MapperFactoryBean">
 			<!-- 接口 -->
 			<property name="mapperInterface" value="com.rimi.dao.UserDao"></property>
 			<property name="sqlSessionFactory"  ref="sessionFactory"></property>
 		</bean>
+			
 		
-		<!-- UserManagerdao -->
-		<bean id="userMd" class="org.mybatis.spring.mapper.MapperFactoryBean">
-			<!-- 接口 -->
-			<property name="mapperInterface" value="com.rimi.dao.UserManagerDao"></property>
-			<property name="sqlSessionFactory"  ref="sessionFactory"></property>
-		</bean>
+		
+		
+		<!-- ud 相当于变量    class 是该类的类型 -->
+	<!-- <bean  id="ud"  class="com.rimi.bean.UserBean">
+		<property name="userName" value="zhangsans"></property>
+		<property name="userName" ><value>lisi</value></property>
+	</bean> -->
+	
 
-		<!-- userservice -->
-		<bean id="us" class="com.rimi.serviceImpl.UserServiceImpl">
-			<property name="ud" ref="ud"></property>
-		</bean>
-		
-		<!-- userManagerservice -->
-		<bean id="userMs" class="com.rimi.serviceImpl.UserManagerServiceImpl">
-			<property name="userMd" ref="userMd"></property>
-		</bean>
+	
+	 <!-- dao -->
+	<!--<bean id="ud"  class="com.rimi.dao.UserDaoImpl"></bean> -->
+	
+	<!-- service -->
 
 </beans>
