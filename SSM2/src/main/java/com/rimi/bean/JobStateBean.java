@@ -1,6 +1,6 @@
 package com.rimi.bean;
 
-public class JobStateBean {
+public class JobstateBean {
     private Integer jobstateId;
 
     private String jobstateName;
@@ -20,14 +20,4 @@ public class JobStateBean {
     public void setJobstateName(String jobstateName) {
         this.jobstateName = jobstateName == null ? null : jobstateName.trim();
     }
-
-	public JobStateBean(Integer jobstateId, String jobstateName) {
-		super();
-		this.jobstateId = jobstateId;
-		this.jobstateName = jobstateName;
-	}
-
-	public JobStateBean() {
-		super();
-	}   
 }

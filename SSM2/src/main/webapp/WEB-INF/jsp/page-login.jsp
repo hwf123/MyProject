@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
 <html lang="en" class="fullscreen-bg">
 
 <head>
-    <title>Rimi | Login  </title>
+    <title>Rimi | Login</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -26,6 +26,13 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
     <!-- ICONS -->
     <link rel="apple-touch-icon" sizes="76x76" href="<%=basePath%>RXF/assets/img/apple-icon.png">
     <link rel="icon" type="image/png" sizes="96x96" href="<%=basePath%>RXF/assets/img/favicon.png">
+    <script language="javascript">
+	function myReload() {
+		document.getElementById("CreateCheckCode").src = document
+				.getElementById("CreateCheckCode").src
+				+ "?nocache=" + new Date().getTime();
+	}
+	</script>
 </head>
 
 <body>
@@ -42,14 +49,20 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                             </div>
                             <form class="form-auth-small" action="login.do" method="post">
                                 <div class="form-group">
-                                    <label for="signin-email" class="control-label sr-only">Email</label>
-                                    <input type="email" class="form-control" id="signin-email" name="userLoginName" value="${userLoginName}" placeholder="用户名">
+                                    <label for="signin-name" class="control-label sr-only">Name</label>
+                                    <input type="text" required="required" class="form-control" id="signin-name" name="userLoginName" value="${userLoginName}" placeholder="用户名">
                                 </div>
                                 <div class="form-group">
                                     <label for="signin-password" class="control-label sr-only">Password</label>
-                                    <input type="password" class="form-control" id="signin-password" name="userPs" value="${userPs}" placeholder="密码">
+                                    <input type="password" required="required" class="form-control" id="signin-password" name="userPs" value="${userPs}" placeholder="密码">
                                 </div>
-                                <div class="form-group clearfix">
+								<div class="form-group" align="left">
+								<label for="signin-pictureCheckCode" class="control-label sr-only">PictureCheckCode</label>
+                                    <input type="text" required="required" style="width:30%;height:34px;padding:6px 12px;font-size:14px;line-height:1.42857143;color:#555;background-color:#fff;background-image:none;border:1px solid #ccc;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);box-shadow:inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition:border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;-o-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s" name="checkCode" id="checkCode" title="验证码区分大小写" size="10" maxlength="4" placeholder="验证码">
+									<img src="PictureCheckCode" id="CreateCheckCode">
+									<a href="" onclick="myReload()"> 看不清,换一个</a>
+								</div>
+								<div class="form-group clearfix">
                                     <label class="fancy-checkbox element-left">
 										<input type="checkbox" name="remember" value="Checked">
 										<span>记住我</span>
@@ -57,7 +70,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                                 </div>
                                 <input type="submit" class="btn btn-primary btn-lg btn-block" value="登录">
                                 <div class="bottom">
-                                    <span class="helper-text"><span class="text-danger">${nameIsOk}${psIsOk}</span>
+                                    <span class="text-danger">${nameIsOk} ${psIsOk} ${message}</span>
                                 </div>
                             </form>
                         </div>
@@ -66,7 +79,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                         <div class="overlay"></div>
                         <div class="content text">
                             <h1 class="heading">Chengdu Rightiphone Technology</h1>
-                            <p>by The Develovers</p>
+                            <p>by The Developers</p>
                         </div>
                     </div>
                     <div class="clearfix"></div>

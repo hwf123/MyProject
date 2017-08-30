@@ -19,7 +19,7 @@
 	    <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
 	    <result column="user_qq" property="userQq" jdbcType="VARCHAR" />
      	<association property="uj" javaType="com.rimi.bean.UserJobBean" resultMap="jobRm"/>
-        <association property="js" javaType="com.rimi.bean.JobStateBean" resultMap="jobStateRm"/>
+        <association property="js" javaType="com.rimi.bean.JobstateBean" resultMap="jobStateRm"/>
         <association property="ur" javaType="com.rimi.bean.UserRoleBean" resultMap="roleRm"/>
         <association property="us" javaType="com.rimi.bean.StateBean" resultMap="stateRm"/>
         <association property="sex" javaType="com.rimi.bean.SexBean" resultMap="sexRm"/>
@@ -50,7 +50,7 @@
  	 </resultMap>
  	 
  	 <!-- JobStateBean -->
-	 <resultMap type="com.rimi.bean.JobStateBean" id="jobStateRm">
+	 <resultMap type="com.rimi.bean.JobstateBean" id="jobStateRm">
 	  	 <id column="jobstate_id" property="jobstateId" jdbcType="INTEGER"/>
          <result column="jobstate_name" property="jobstateName" jdbcType="VARCHAR"/>
 	 </resultMap>

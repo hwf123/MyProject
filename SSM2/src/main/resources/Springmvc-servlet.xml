@@ -22,28 +22,21 @@
 			<property name="suffix" value=".jsp"></property>
 		</bean>
 		
-		<!-- 加载数据源配置文件 -->
-		<context:property-placeholder location="classpath:jdbc.properties"/> 
-		
 		<!-- 数据源 链接数据库参数 -->
-		<!--  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-			<property name="driverClassName" value="${driver}"></property>
-			<property name="username" value="${username}"></property>
-			<property name="password"  value="${password}"></property>
-			<property name="url"  value="${url}"></property>
-		</bean>	-->	
-		
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 			<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
 			<property name="username" value="root"></property>
 			<property name="password"  value="123"></property>
 			<property name="url"  value="jdbc:mysql://localhost:3306/rimi"></property>
-		</bean>
+		</bean>		
 
 		<!-- session工厂 -->
 		<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		    <!-- mybatis核心配置文件的路径 -->
+			
+			
 			<property name="typeAliasesPackage"  value="com.rimi.bean"></property>
+		
 			<property name="mapperLocations" value="classpath:com/rimi/daoImpl/*.xml"></property>
 			<property name="dataSource" ref="dataSource"></property> 
 		</bean>		
@@ -72,4 +65,14 @@
 			<property name="userMd" ref="userMd"></property>
 		</bean>
 
+	<!-- 非法拦截 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<mvc:exclude-mapping path="/newlogin.do"/>
+			<mvc:exclude-mapping path="/login.do"/>
+			<bean class="com.rimi.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
 </beans>

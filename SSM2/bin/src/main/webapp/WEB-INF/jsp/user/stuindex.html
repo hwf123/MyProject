@@ -77,6 +77,16 @@
         });
     </script>
 
+	<script type="text/javascript">
+		function logout(){
+			 var bool = window.confirm("确定注销登录吗");
+			 if(bool){//确定
+				 window.location="logout.do";
+			 }else{//取消
+			 	
+			 }
+		}
+	</script>
 
 </head>
 
@@ -100,7 +110,7 @@
                                 <li><a href="user.html"><i class="lnr lnr-user"></i> <span>我的信息</span></a></li>
                                 <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message(未实现)</span></a></li>
                                 <li><a href="#"><i class="lnr lnr-cog"></i> <span>修改密码</span></a></li>
-                                <li><a href="#"><i class="lnr lnr-exit"></i> <span>登出</span></a></li>
+                                <li><a href="javascript:logout()"><i class="lnr lnr-exit"></i> <span>登出</span></a></li>
                             </ul>
                         </li>
                     </ul>

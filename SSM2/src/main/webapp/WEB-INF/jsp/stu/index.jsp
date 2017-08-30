@@ -4,6 +4,8 @@
 String path = request.getContextPath();   
 String basePath = request.getScheme()+"://" +request.getServerName()+":" +request.getServerPort()+path+"/" ;   
 %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 
@@ -65,22 +67,105 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                 alert("请选中要操作的项");
             }
         }
+        $(function () {
+ 			$('#excelPro').click(function(){
+ 				var alls=document.getElementsByName("check");
+ 				var ids=new Array();
+ 				var str="";
+ 				for(var i=0;i<alls.length;i++){
+ 					var c=alls[i];
+ 					if(c.checked){
+ 						ids.push(c.value);
+ 						if(str==""){
+ 							 str=c.value;
+ 						}else{
+ 							str=str+","+c.value;
+ 						}	
+ 					}			
+ 				}
+ 				if(ids.length>0){
+ 					if(confirm("确认操作?")){
+ 	 					window.location.href='excel.do?Str='+str;
+ 					}
+ 				}else{
+ 					alert("请选中要操作的项");
+ 				}
+ 			 });
+ 	    });
+        $(function () {
+ 			$('#excelProAll').click(function(){
+ 				
+ 					if(confirm("确认操作?")){
+ 	 					window.location.href='excel.do?Str=all';
+ 					}
+ 				
+ 			 });
+ 	    });
+        
+        
         $(function() {
             $('#loginform').submit(function(e) {
 
                 return true;
             });
 
-            var x = $("#modaltrigger").attr("name");
-            $('#loginform').attr("action", "user.html?id=" + x);
+            var x = $("a[href='#loginmodal']").attr("stuid");
+            $('#loginform').attr("action", "enlist.do?stuid=" + x);
 
-            $('#modaltrigger').leanModal({
+            $("a[href='#loginmodal']").leanModal({
 
                 top: 200,
-                overlay: 0.45,
+                overlay: 0.6,
                 closeButton: ".hidemodal"
             });
         });
+        
+        
+        $(function () {
+	        $('#cs').ready(function () {
+	        	var way = $('#cs').attr("num");
+	        	if(way!="undefined"&&way!=null&&way!=""){
+				$('#cs').val(way)
+	        	}else{
+					$('#cs').val(0)
+
+	        	}
+	        });
+	   }); 
+        $(function () {
+	        $('#ia').ready(function () {
+	        	var way = $('#ia').attr("num");
+	        	if(way!="undefined"&&way!=null&&way!=""){
+				$('#ia').val(way)
+	        	}else{
+					$('#ia').val(0)
+
+	        	}
+	        });
+	   }); 
+        
+        $(function () {
+	        $('#cp').ready(function () {
+	        	var way = $('#cp').attr("num");
+	        	if(way!="undefined"&&way!=null&&way!=""){
+				$('#cp').val(way)
+	        	}else{
+					$('#cp').val(0)
+
+	        	}
+	        });
+	   }); 
+        $(function () {
+	        $('#tm').ready(function () {
+	        	var way = $('#tm').attr("num");
+	        	if(way!="undefined"&&way!=null&&way!=""){
+				$('#tm').val(way)
+	        	}else{
+					$('#tm').val(1)
+
+	        	}
+	        });
+	   }); 
     </script>
 
 
@@ -92,7 +177,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
         <!-- NAVBAR -->
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="brand">
-                <a href="#"><span style="font-size: 35px;padding-top:20px;">Rimi</span></a>
+                <a href="index.do"><span style="font-size: 35px;padding-top:20px;position:relative;top:8px;">Rimi</span></a>
             </div>
             <div class="container-fluid">
                 <div class="navbar-btn">
@@ -101,7 +186,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                 <div id="navbar-menu">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="../assets/img/user1.png" class="img-circle" alt="Avatar"> <span>王权富贵</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<%=basePath%>RXF/assets/img/user1.png" class="img-circle" style="position:relative;top:7px;" alt="Avatar"><span>${ub.userName}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#"><i class="lnr lnr-user"></i> <span>我的信息</span></a></li>
                                 <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message(未实现)</span></a></li>
@@ -127,8 +212,8 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                             </a>
                             <div id="subPages1" class="collapse">
                                 <ul class="nav">
-                                    <li><a href="index.html" class="">学员跟进</a></li>
-                                    <li><a href="Student-add.html" class="">添加学员</a></li>
+                                    <li><a href="index.do" class="">学员跟进</a></li>
+                                    <li><a href="addStudent.do" class="">添加学员</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -158,69 +243,73 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                     </div>
                 </div>
                 <div class="panel-body no-padding">
-                    <form action="index.html" method="post" class="panel-body no-padding">
+                    <form action="searchStudent.do" method="post" class="panel-body no-padding">
                         <table class="table table-hover definewidth m10">
                             <tbody>
                                 <tr>
                                     <td width="10%" class="tableleft">学生姓名：</td>
-                                    <td><input type="text" name="pname" value="" /></td>
+                                    <td><input type="text" name="stuName" value="${param.stuName}" /></td>
+
 
                                     <td width="10%" class="tableleft">学生电话：</td>
-                                    <td><input type="text" name="pname" value="" /></td>
+                                    <td><input type="text" name="stuTel" value="${param.stuTel}" /></td>
 
                                     <td width="10%" class="tableleft">学生QQ：</td>
-                                    <td><input type="text" name="pname" value="" /></td>
+                                    <td><input type="text" name="stuQq" value="${param.stuQq}" /></td>
+                                    
+                                     
                                 </tr>
 
                                 <tr>
-                                    <td width="10%" class="tableleft">咨询方式：</td>
+                                    <td width="10%" class="tableleft" >咨询方式：</td>
                                     <td>
-                                        <select>
-							        		<option>--请选择--</option>
-							        		<option value="1">线上-营销QQ</option>
-							        		<option value="2">线上-营销QQ</option>
-							        		<option value="3">线上-营销QQ</option>
-							        		<option value="4">线上-营销QQ</option>
+                                        <select name="consultWay" id="cs" num="${param.consultWay}">
+							        		<option value="0" >--请选择--</option>
+							        		<c:forEach var="way" items="${csway}">
+							        		<option value="${way.csWayId}" >${way.csWayName}</option>
+							        		</c:forEach>
 							        	</select>
                                     </td>
 
-                                    <td width="10%" class="tableleft">是否报名：</td>
+                                    <td width="10%" class="tableleft" >是否报名：</td>
                                     <td>
-                                        <select>
-							        		<option value="1">是</option>
-							        		<option value="2" selected>否</option>
+                                        <select name="isApply" id="ia" num="${param.isApply}">
+                                      		<option value="0" >--请选择--</option>
+							        		<option value="1" >是</option>
+							        		<option value="2" >否</option>
 							        	</select>
                                     </td>
 
-                                    <td width="10%" class="tableleft">商情优先级：</td>
+                                    <td width="10%" class="tableleft" >商情优先级：</td>
                                     <td>
-                                        <select>
-						                    <option value="1">☆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
-						                    <option value="2">☆☆</option>
-						                    <option value="3">☆☆☆</option>
-						                    <option value="4">☆☆☆☆</option>
-						                    <option value="5">☆☆☆☆☆</option>
+                                        <select name="consultPriority" id="cp" num="${param.consultPriority}">
+											<option value="0">--请选择--</option>
+						                    <option value="1" >★</option>
+						                    <option value="2" >★★</option>
+						                    <option value="3" >★★★</option>
+						                    <option value="4" >★★★★</option>
+						                    <option value="5" >★★★★★</option>
 						                </select>
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td width="10%" class="tableleft">
-                                        <select>
+                                        <select name="timeway" id="tm" num="${param.timeway}">
 							        		<option value="1">咨询日期</option>
-							        		<option value="3">跟进日期</option>
+							        		<option value="2">跟进日期</option>
 							        	</select>
                                     </td>
 
                                     <td>
-                                        <input type="date" name="pname" value="" />&nbsp;至&nbsp;<input type="date" name="pname" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input type="date" name="Date1" value="" />&nbsp;至&nbsp;<input type="date" name="Date2" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     </td>
 
 
                                     <td colspan="4">
                                         <div class="col-md-12 text-right">
-                                            <button type="submit" class="btn btn-primary" type="button">查询</button>
-                                            <button type="submit" class="btn btn-primary" type="button">清空</button>
+                                            <button type="submit" class="btn btn-primary" id="bcx1" >查询</button>
+                                            <button type="submit" class="btn btn-primary" id="bqk1"	>清空</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -248,6 +337,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                                 <th>线下咨询师</th>
                                 <th>联系电话</th>
                                 <th>QQ</th>
+                                <th>微信</th>
                                 <th>年龄</th>
                                 <th>性别</th>
                                 <th>咨询方式</th>
@@ -258,73 +348,73 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                             </tr>
                         </thead>
                         <tbody>
+                        <% 
+                        int i=1;
+                        
+                        %>
+                        <c:forEach   var="stu"  items="${stus}">
                             <tr>
                                 <td style="vertical-align:middle;">
-                                    <input type="checkbox" name="check" value="1">
+                                    <input type="checkbox" name="check" value="${stu.stuId}">
                                 </td>
-                                <td>1</td>
-                                <td>张三</td>
-                                <td>2017-12-12</td>
-                                <td>睿小峰</td>
-                                <td>睿小峰</td>
-                                <td>13654112345</td>
-                                <td>6541234654</td>
-                                <td>25</td>
-                                <td>男</td>
-                                <td>线上-营销QQ</td>
-                                <td>*****</td>
-                                <td>是</td>
-                                <td>2017-12-12</td>
+                                <td><%=i %> </td>
+                                <td>${stu.stuName}</td>
+                                <td>${stu.consultDate}</td>
+                                <td>${stu.onlineId}</td>
+                                <td>${stu.offlineId}</td>
+                                <td>${stu.stuTel}</td>
+                                <td>${stu.stuQq}</td>
+                                <td>${stu.stuWechat}</td>
+                                <td>${stu.stuAge}</td>
+                                <td>${stu.stuSex}</td>
+                                <td>${stu.consultWay}</td>
                                 <td>
-                                    <a href='Student-info.html'><span class="label label-primary">详情</span></a>
-                                    <a href='Student-edit.html'><span class="label label-info">编辑</span></a>
-                                    <a href='#loginmodal' id="modaltrigger" name="1"><span class="label label-success" >报名</span></a>
+                                  <c:forEach     begin="1" end="${stu.consultPriority}">
+                            		      ★
+                                  </c:forEach>
+                                </td>
+                                <c:if test="${stu.isApply==1}">
+                                <td>已报名</td>
+                                </c:if>
+                                <c:if test="${stu.isApply==2}">
+                                <td>未报名</td>
+                                </c:if>
+                                <td>${stu.recentRecordTime}</td>
+                                <td>
+                                    <a href='infoStudent.do?stuid=${stu.stuId}'><span class="label label-primary">详情</span></a>
+                                    <a href='editStudent.do?stuid=${stu.stuId}'><span class="label label-info">编辑</span></a>
+                                     <c:if test="${stu.isApply==2}">
+									 <a href='#loginmodal'  stuid="${stu.stuId}"><span class="label label-success" >点击报名</span></a>
+                                	</c:if>
+                               	 	<c:if test="${stu.isApply==1}">
+                               	 	<a  name="1"><span class="label label-danger" >已报名</span></a>
+                                	</c:if>
+                                	
                                 </td>
                             </tr>
+                            <% i++; %>
+							</c:forEach>
                             <tr>
-                                <td style="vertical-align:middle;">
-                                    <input type="checkbox" name="check" value="1">
-                                </td>
-                                <td>1</td>
-                                <td>张三</td>
-                                <td>2017-12-12</td>
-                                <td>睿小峰</td>
-                                <td>睿小峰</td>
-                                <td>13654112345</td>
-                                <td>6541234654</td>
-                                <td>25</td>
-                                <td>男</td>
-                                <td>线上-营销QQ</td>
-                                <td>*****</td>
-                                <td>是</td>
-                                <td>2017-12-12</td>
-                                <td>
-                                    <a href='Student-info.html'><span class="label label-primary">详情</span></a>
-                                    <a href='Student-edit.html'><span class="label label-info">编辑</span></a>
-                                    <a href='#loginmodal' id="modaltrigger" name="1"><span class="label label-success" >报名</span></a>
-                                </td>
-                            </tr>
-
-                            <tr>
+                            
                                 <td colspan="16">
                                     <div class="col-md-6 text-left inline pull-left page">
-                                        <a href='#'>首页</a> &nbsp;&nbsp;&nbsp;
-                                        <a href='#'>上一页</a> &nbsp;&nbsp;&nbsp;
-                                        <a href='#'>下一页</a> &nbsp;&nbsp;&nbsp;
-                                        <a href='#'>尾页</a> &nbsp;&nbsp;&nbsp; 共
-                                        <span class='current'>32</span>条记录<span class='current'> 第1/33 </span>页&nbsp;&nbsp;
-                                        <input type="text" placeholder="1" id="forword" />
+                                        <a href='searchStudent.do?isok=1&nowpage=1'>首页</a> &nbsp;&nbsp;&nbsp;
+                                        <a href='searchStudent.do?isok=1&nowpage=${pb.nowPage-1}'>上一页</a> &nbsp;&nbsp;&nbsp;
+                                        <a href='searchStudent.do?isok=1&nowpage=${pb.nowPage+1}'>下一页</a> &nbsp;&nbsp;&nbsp;
+                                        <a href='searchStudent.do?isok=1&nowpage=${pb.totalPage}'>尾页</a> &nbsp;&nbsp;&nbsp; 共
+                                        <span class='current'>${pb.count}</span>条记录<span class='current'> 第${pb.nowPage}/${pb.totalPage}</span>页&nbsp;&nbsp;
+                                        <input type="text" placeholder="${pb.nowPage}" id="forword" />
                                         <script type="text/javascript">
                                             $("#forword").keydown(function() {
                                                 if (event.keyCode == "13") {
-                                                    alert('按下了回车键');
+                                                	window.location.href="searchStudent.do?isok=1&nowpage="+$("#forword").val()
                                                 }
                                             });
                                         </script>
                                     </div>
                                     <div class=" col-md-6 text-right">
-                                        <button type="submit" class="btn btn-primary" type="button">导出选中</button>
-                                        <button type="submit" class="btn btn-primary" type="button">导出所有</button>
+                                        <button type="submit" class="btn btn-primary" id="excelPro">导出选中</button>
+                                        <button type="submit" class="btn btn-primary" id="excelProAll">导出所有</button>
                                     </div>
                                 </td>
                             </tr>
@@ -334,26 +424,26 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                 </div>
 
             </div>
-            <div id="loginmodal" style="display:none;">
+            
+            <!-- END MAIN CONTENT -->
+        </div>
+        <div id="loginmodal" style="display:none;">
                 <h1>报名</h1>
                 <form id="loginform" name="loginform" method="POST" action="">
                     <label for="username">报名时间:</label>
-                    <input type="date" class="form-control input-md" tabindex="1">
+                    <input type="date" class="form-control input-md" name="applytime">
                     <br>
                     <label for="password">付款方式：</label>
-                    <select class="form-control input-md" tabindex="2">
-							        		<option>--请选择--</option>
-							        		<option value="1">线上-营销QQ</option>
-							        		<option value="2">线上-营销QQ</option>
-							        		<option value="3">线上-营销QQ</option>
-							        		<option value="4">线上-营销QQ</option>
+                    <select class="form-control input-md" name="applyWay">
+							        		<option value="0" >--请选择--</option>
+							        		<c:forEach var="way" items="${awb}">
+							        		<option value="${way.applyWayId}" >${way.applyWayName}</option>
+							        		</c:forEach>
 							        	</select>
                     <br>
-                    <div class="center"><input type="submit" name="loginbtn" id="loginbtn" class="btn btn-primary btn-toastr" value="报名" tabindex="3"></div>
+                    <div class="center"><input type="submit"  id="loginbtn" class="btn btn-primary btn-toastr" value="报名" ></div>
                 </form>
             </div>
-            <!-- END MAIN CONTENT -->
-        </div>
     </div>
     <!-- END MAIN -->
     <div class="clearfix"></div>

@@ -18,7 +18,7 @@ public class UserBean implements Serializable {
 	private String userPhone;		//用户手机号码
 	private String userQq;			//用户QQ
 	private UserJobBean uj;			//职业类
-	private JobStateBean js;		//工作状态类
+	private JobstateBean js;		//工作状态类
 	private UserRoleBean ur;		//用户角色类
 	private StateBean us;			//用户状态类
 	private SexBean sex;			//性别类
@@ -114,10 +114,10 @@ public class UserBean implements Serializable {
 	public void setUj(UserJobBean uj) {
 		this.uj = uj;
 	}
-	public JobStateBean getJs() {
+	public JobstateBean getJs() {
 		return js;
 	}
-	public void setJs(JobStateBean js) {
+	public void setJs(JobstateBean js) {
 		this.js = js;
 	}
 	public UserRoleBean getUr() {

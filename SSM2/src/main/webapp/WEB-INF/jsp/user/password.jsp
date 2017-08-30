@@ -54,7 +54,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
         	var isok =$.trim($("#isok").val());
         	if(isok =="修改成功"){
         		alert("修改成功");
-        		parent.location.href = "index.do";
+        		parent.location.href = "newlogin.do";
         	}
         	if(isok =="修改失败"){
         		alert("修改失败");

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.rimi.bean.JobStateBean;
+import com.rimi.bean.JobstateBean;
 import com.rimi.bean.PageBean;
 import com.rimi.bean.ParameterBean;
 import com.rimi.bean.SexBean;
@@ -73,7 +73,7 @@ public class UserManagerController {
 		List<UserRoleBean> roleList = userMs.selectRole();
 		model.addAttribute("addRole", roleList);
 		//工作状态集合
-		List<JobStateBean> jobStateList = userMs.selectJobState();
+		List<JobstateBean> jobStateList = userMs.selectJobState();
 		model.addAttribute("addJobState", jobStateList);
 		//根据登录存储的Id以查询用户
 		UserBean ub2 =(UserBean)session.getAttribute("loginUb");
@@ -149,7 +149,7 @@ public class UserManagerController {
 		List<UserRoleBean> roleList = userMs.selectRole();
 		model.addAttribute("queryRole", roleList);
 		//工作状态集合
-		List<JobStateBean> jobStateList = userMs.selectJobState();
+		List<JobstateBean> jobStateList = userMs.selectJobState();
 		model.addAttribute("queryJobState", jobStateList);
 		//根据登录存储的Id以查询用户
 		UserBean ub2 =(UserBean)session.getAttribute("loginUb");
@@ -291,7 +291,7 @@ public class UserManagerController {
 			List<UserRoleBean> roleList = userMs.selectRole();
 			model.addAttribute("editRole", roleList);
 			//工作状态集合
-			List<JobStateBean> jobStateList = userMs.selectJobState();
+			List<JobstateBean> jobStateList = userMs.selectJobState();
 			model.addAttribute("editJobState", jobStateList);
 			session.setAttribute("ub1", ub);
 			return "user/edit";

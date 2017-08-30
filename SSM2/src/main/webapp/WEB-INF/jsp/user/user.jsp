@@ -60,6 +60,15 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
     		});
     	});
     });
+    
+    function logout(){
+		 var bool = window.confirm("确定注销登录吗");
+		 if(bool){//确定
+			 window.location.href="logout.do";
+		 }else{//取消
+		 	
+		 }
+	}
     </script>
 </head>
 
@@ -83,7 +92,7 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                             <ul class="dropdown-menu">
                                 <li><a href="lookInfo.do?InfoUserId=${InfoUb.userId}"><i class="lnr lnr-user"></i> <span>我的信息</span></a></li>
                                 <li><a href="javascript:;" class="bounceInDown"><i class="lnr lnr-cog"></i> <span>修改密码</span></a></li>
-                                <li><a href=""><i class="lnr lnr-exit"></i> <span>退出登录</span></a></li>
+                                <li><a href="javascript:logout()"><i class="lnr lnr-exit"></i> <span>退出登录</span></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -102,8 +111,8 @@ String basePath = request.getScheme()+"://" +request.getServerName()+":" +reques
                             </a>
                             <div id="subPages1" class="collapse">
                                 <ul class="nav">
-                                    <li><a href="../stu/index.html" class="">学员跟进</a></li>
-                                    <li><a href="../stu/Student-add.html" class="">添加学员</a></li>
+                                    <li><a href="userIndex.do" class="">学员跟进</a></li>
+                                    <li><a href="userAddStudent.do" class="">添加学员</a></li>
                                 </ul>
                             </div>
                         </li>

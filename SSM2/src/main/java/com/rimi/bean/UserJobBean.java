@@ -20,15 +20,4 @@ public class UserJobBean {
     public void setJobName(String jobName) {
         this.jobName = jobName == null ? null : jobName.trim();
     }
-
-	public UserJobBean(Integer jobId, String jobName) {
-		super();
-		this.jobId = jobId;
-		this.jobName = jobName;
-	}
-
-	public UserJobBean() {
-		super();
-	}
-    
 }

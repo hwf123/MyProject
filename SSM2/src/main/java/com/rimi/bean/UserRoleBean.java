@@ -20,15 +20,4 @@ public class UserRoleBean {
     public void setRoleName(String roleName) {
         this.roleName = roleName == null ? null : roleName.trim();
     }
-
-	public UserRoleBean(Integer roleId, String roleName) {
-		super();
-		this.roleId = roleId;
-		this.roleName = roleName;
-	}
-
-	public UserRoleBean() {
-		super();
-	}
-    
 }

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 配置对应的接口 -->
 
 <mapper  namespace="com.rimi.dao.UserDao">
  	
+ 	<!-- 基本用户类 -->
  	<resultMap type="UserBean" id="rm">
  		<id property="userId"   column="user_id" />
  		<result property="userLoginName" column="user_loginname"/>
@@ -21,9 +22,294 @@
  		<result property="userPhone" column="user_phone"/>
  		<result property="userQq" column="user_qq"/>
  	</resultMap>
- 
+ 	
+ 	
+ 	<resultMap type="StudentInfoBean" id="sib">
+ 	<id property="stuId" column="stu_id"/>
+ 	<result property="stuName" column="stu_name"/>
+ 	<result property="consultDate" column="consult_date"/>
+ 	<result property="onlineId" column="name"/>
+ 	<result property="offlineId" column="user_name"/>
+ 	<result property="stuTel" column="stu_tel"/> 
+ 	<result property="stuQq" column="stu_qq"/> 
+ 	<result property="stuWechat" column="stu_wechat"/> 
+ 	<result property="stuAge" column="stu_age"/>
+ 	<result property="stuSex" column="sex_name"/>
+ 	<result property="consultWay" column="cs_way_name"/>
+ 	<result property="consultPriority" column="consult_priority"/>
+ 	<result property="isApply" column="is_apply"/>
+ 	<result property="recentRecordTime" column="newrecord_time"/>
+ 	</resultMap>
+ 	
+ 	
+ 	
+ 	<resultMap type="StuBean" id="stub">
+ 	<id property="stuId" column="stu_id"/>
+ 	<result property="stuName" column="stu_name"/>
+ 	<result property="stuSex" column="stu_sex"/>
+ 	<result property="stuAge" column="stu_age"/>
+ 	<result property="stuTel" column="stu_tel"/>
+	<result property="stuQq" column="stu_qq"/> 
+ 	<result property="stuWechat" column="stu_wechat"/>
+ 	<result property="stuJobstate" column="stu_jobstate"/>
+ 	<result property="stuRegion" column="stu_region"/>
+ 	<result property="stuEducation" column="stu_education"/>
+	<result property="stuSchool" column="stu_school"/>
+	<result property="stuMajor" column="stu_major"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="ConsultWayBean" id="cwb">	
+ 	<id property="csWayId" column="cs_way_id"/>
+	<result property="csWayName" column="cs_way_name"/>
+	</resultMap>
+	
+	<resultMap type="ApplyWayBean" id="awb">	
+ 	<id property="applyWayId" column="apply_way_id"/>
+	<result property="applyWayName" column="apply_way_name"/>
+	</resultMap>
+	
+	<resultMap type="EducationBean" id="eb">	
+ 	<id property="educationId" column="education_id"/>
+	<result property="educationName" column="education_name"/>
+	</resultMap>
+	
+	
+	<resultMap type="ConsultTimeBean" id="ct">
+	<id property="csTimeId" column="cs_time_id"/>
+	<result property="csTimeName" column="cs_time_name"/>
+	<result property="csTimeState" column="cs_time_state"/>
+	</resultMap>
+	 
+	
+	<resultMap type="ApplyBean" id="ab">	
+ 	<id property="applyId" column="apply_id"/>
+ 	<result property="stuId" column="stu_id"/>
+	<result property="isApply" column="is_apply"/>
+	<result property="isApply" column="is_apply"/>
+	<result property="applyTime" column="apply_time"/>
+	<result property="applyWay" column="apply_way"/>
+	</resultMap>
+	
+	<resultMap type="ConsultCategoryBean" id="ccb">	
+ 	<id property="csCategoryId" column="cs_category_id"/>
+	<result property="csCategoryName" column="cs_category_name"/>
+	<result property="csCategoryState" column="cs_category_state"/>
+	</resultMap>
+	
+	<resultMap type="SourcesBean" id="sou">
+	<id property="sourcesId" column="sources_id"/>
+	<result property="sourcesName" column="sources_name"/>
+	</resultMap>
+	
+	<insert id="addStuBean" parameterType="StuBean">
+        insert into stu_tb 
+        values (0,#{stuName},#{stuSex},#{stuAge},#{stuTel},#{stuQq},#{stuWechat},#{stuJobstate},#{stuRegion},#{stuEducation},#{stuSchool},#{stuMajor})
+        <selectKey resultType="Integer" order="AFTER" keyProperty="stuId">
+            SELECT LAST_INSERT_ID() AS stuId
+        </selectKey>
+    </insert>
+	
+	<insert id="addConsultBean" parameterType="java.util.Map">  
+	insert into consult_tb values(0,#{stuid},#{offline},#{online},#{cc},#{cw},
+	<choose>
+	<when test="cd!=null and cd.length>0">#{cd}</when>
+	<otherwise>
+	default
+	</otherwise>
+	</choose>
+	,#{ct},
+	<choose>
+	<when test="vt!=null and vt.length>0">#{vt}</when>
+	<otherwise>
+	default
+	</otherwise>
+	</choose>
+	,#{sour},null,null,#{cp},#{remark},default)
+	</insert>  
+	
+		
+	<insert id="addNRBean" parameterType="java.util.Map">  
+	insert into newrecord_tb values(0,#{stuid},#{nt},#{ne})
+	</insert>  
+	
+	<insert id="addApplyBean" parameterType="java.util.Map">  
+	insert into apply_tb values(0,#{stuid},2,null,null)
+	</insert>  
+	
+	<resultMap type="NewrecordBean" id="nb">
+	<id property="newrecordId" column="newrecord_id"/>
+	<result property="stuId" column="stu_id"/>
+	<result property="newrecordTime" column="newrecord_time"/>
+	<result property="newrecordExplain" column="newrecordExplain"/>
+	</resultMap>
+	
+	<select id="getNewRecord" resultMap="nb" parameterType="int"> 
+		select * from newrecord_tb where stu_id=#{stuid}
+	</select>
+	
+	
+	<select id="getSources" resultMap="sou">
+		select * from sources_tb 
+	</select>
+	
+	
+	
+	<select id="getPriority" parameterType="int" resultType="int">
+		select consult_priority from consult_tb where stu_id=#{stuid}
+	</select>
+	
+	<select id="getRemark" parameterType="int" resultType="String">
+		select consult_remark from consult_tb where stu_id=#{stuid}
+	</select>
+	
+	<select id="getSource" resultMap="sou" parameterType="int">
+		select sources_name  from sources_tb s inner join consult_tb c on s.sources_id=c.sources_id  where c.stu_id=#{stuid}
+	</select>
+	
+	<select id="getConsultTimes" resultMap="ct">
+		select * from consult_time_tb where cs_time_state=1
+	</select>
+	
+	<select id="getConsultTime" resultMap="ct" parameterType="int">
+		select cs_time_name from consult_time_tb ct inner join consult_tb c on ct.cs_time_id=c.consult_time where c.stu_id=#{stuid}
+	</select>
+	
+	<select id="getConsultDate" resultType="String" parameterType="int">
+		select consult_date from consult_tb where stu_id=#{stuid}
+	</select>
+	
+	<select id="getVisitTime" resultType="String" parameterType="int">
+		select visit_time from consult_tb where stu_id=#{stuid}
+	</select>
+	
+ 	<select id="getConsultWay"  resultMap="cwb" >
+		select  *  from  consult_way_tb  c1 inner join consult_tb c2 on c1.cs_way_id=c2.consult_way where  c2.stu_id=#{stuid}
+ 	</select>
+ 	
+ 	<select id="getConsultCategorys"  resultMap="ccb" >
+		select  *  from  consult_category_tb  where  cs_category_state = 1 
+ 	</select>
+ 	
+ 	<select id="getConsultCategory"  resultMap="ccb" >
+		select  *  from  consult_category_tb  c1 inner join consult_tb c2 on c1.cs_category_id=c2.consult_category where  c2.stu_id=#{stuid}
+ 	</select>
+ 	
+ 	<select id="getStuBeanByStuId" parameterType="int" resultMap="stub" >
+		select  *  from  stu_tb  where  stu_id = #{stuId} 
+ 	</select>
+ 	<select id="getEducationByStuId" parameterType="int" resultMap="eb" >
+		select  *  from  education_tb  e inner join stu_tb s on  s.stu_education = e.education_id where s.stu_id=#{stu_id} 
+ 	</select>
+ 	
+ 	<select id="getEducationList"  resultMap="eb" >
+		select  *  from  education_tb
+ 	</select>
+ 	
+ 	<select id="getOnlineTeachers"  resultMap="rm" >
+		select  *  from  user_tb  where  user_state=1 and user_role=2 and user_job=1 and user_jobstate=1
+ 	</select>
+ 	
+ 	<select id="getOnlineTeacher"  resultMap="rm" >
+		select  *  from  user_tb u inner join consult_tb c on u.user_id=c.online_id  
+		
+		where   c.stu_id=#{stuid}
+ 	</select>
+ 	
+ 	<select id="getOfflineTeacher"  resultMap="rm" >
+		select  *  from  user_tb u inner join consult_tb c on u.user_id=c.offline_id  
+		
+		where   c.stu_id=#{stuid}
+ 	</select>
+	
+	<select id="getOfflineTeachers"  resultMap="rm" >
+		select  *  from  user_tb  where  user_state=1 and user_role=2 and user_job=2 and user_jobstate=1
+ 	</select>
+
+	
  	<select id="login" parameterType="String" resultMap="rm" >
 		select  *  from  user_tb  where  user_loginname = #{arg0} 
  	</select>
+ 	
+ 	<update id="enterList" parameterType="ApplyBean">
+ 		update apply_tb 
+ 		<set>
+ 			is_apply=#{isApply},
+ 		<if test="applyTime!=null and applyTime.length()>0">apply_time=#{applyTime},</if>
+		<if test="applyWay!=null and applyWay.length()>0">apply_way=#{applyWay},</if>
+ 		</set> 
+ 		<where>
+ 		stu_id=#{stuId}
+ 		</where>
+ 	</update>
+ 	
+ 	<select id="getConsultWayByUserId"  resultMap="cwb">
+		select  *  from  consult_way_tb  where cs_way_state=1
+ 	</select>
+ 	
+ 	<select id="getApplyWayBean"  resultMap="awb">
+		select  *  from  apply_way_tb  
+ 	</select>
+ 	
+ 	<select id="getApplyWayBeanByApplyId"  resultMap="awb">
+		select  *  from  apply_way_tb aw inner join apply_tb a on aw.apply_way_id=a.apply_way where a.apply_id=#{applyId}
+ 	</select>
+ 	
+ 	<select id="getApplyBeanByStuId"  resultMap="ab" parameterType="int">
+		select  *  from  apply_tb  where stu_id=#{stuid}
+ 	</select>
+ 	
+ 	<select id="getInfoListByUserId" parameterType="java.util.Map" resultMap="sib" >
+		SELECT distinct s.stu_id,
+		s.stu_name,
+		c.consult_date,
+		u1.user_name as name,
+		u2.user_name,s.stu_tel,s.stu_qq,
+		s.stu_wechat,
+		s.stu_age,se.sex_name,
+		cwt.cs_way_name,c.consult_priority,
+		a.is_apply,r.newrecord_time from stu_tb s 
+		
+		INNER JOIN consult_tb c on s.stu_id=c.stu_id 
+		INNER JOIN consult_way_tb cwt on cwt.cs_way_id=c.consult_way
+		INNER JOIN user_tb u1 on c.online_id=u1.user_id 
+		 <if test="userjob==1">
+		and u1.user_id=#{userid}
+		</if> 
+		INNER JOIN user_tb u2 on c.offline_id=u2.user_id 
+		<if test="userjob==2">
+		and u2.user_id=#{userid}
+		</if> 
+		INNER JOIN apply_tb a on s.stu_id=a.stu_id
+		INNER JOIN newrecord_tb r on s.stu_id=r.stu_id
+		INNER JOIN sex_tb se on s.stu_sex=se.sex_id
+	<where>
+	 r.newrecord_time=(select max(newrecord_time)  from  newrecord_tb WHERE stu_id=s.stu_id) 
+	<if test="stuName != null and stuName.length>0 " >and s.stu_name like concat(concat('%',#{stuName}),'%')</if>
+	<if test="stuTel != null and stuTel.length>0 " >and s.stu_tel like concat(concat('%',#{stuTel}),'%')</if>
+	<if test="stuQq != null and stuQq.length>0 " >and s.stu_qq like concat(concat('%',#{stuQq}),'%')</if>
+	<if test="consultWay != null and consultWay.length>0 " >and c.consult_way=#{consultWay}</if>
+	<if test="isApply != null and isApply.length>0 " >and a.is_apply=#{isApply}</if>
+	<if test="consultPriority != null and consultPriority.length>0 " >and c.consult_priority=#{consultPriority}</if>
+	<if test="timeway==1">
+	<if test="Date1!=null and Date1.length>0">
+	<![CDATA[ and c.consult_date >= #{Date1} ]]>
+	</if>
+	<if test="Date2!=null and Date2.length>0">
+	<![CDATA[ and c.consult_date <= #{Date2} ]]>
+	</if> 
+	</if>
+	<if test="timeway==2">
+	<if test="Date1!=null and Date1.length>0">
+	<![CDATA[ and r.newrecord_time >= #{Date1} ]]>
+	</if>
+	<if test="Date2!=null and Date2.length>0">
+	<![CDATA[ and r.newrecord_time <= #{Date2} ]]>
+	</if> 
+	</if>
+	
+	<if test="num!=null and size!=null">  order by s.stu_id limit #{num},#{size}</if>
+	</where>
+	
+  	</select> 
 </mapper>
 

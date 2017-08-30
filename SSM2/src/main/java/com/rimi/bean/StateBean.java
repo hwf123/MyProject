@@ -20,13 +20,4 @@ public class StateBean {
     public void setStateName(String stateName) {
         this.stateName = stateName == null ? null : stateName.trim();
     }
-
-	public StateBean() {
-		super();
-	}
-	public StateBean(Integer stateId, String stateName) {
-		super();
-		this.stateId = stateId;
-		this.stateName = stateName;
-	}   
 }

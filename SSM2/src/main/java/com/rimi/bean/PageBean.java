@@ -1,7 +1,6 @@
 package com.rimi.bean;
 
 public class PageBean {
-
 	private String nowPage;//首页
 	private String count;//总数据数
 	private String pageSize;//每页显示五条
@@ -39,5 +38,7 @@ public class PageBean {
 	}
 	public PageBean() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
+	
 }
